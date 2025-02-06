@@ -4,24 +4,28 @@
 import * as React from 'react'
 
 function UsernameForm({onSubmitUsername}) {
+  const [error,setError] = React.useState(null)
+
   function handleSubmit(event) {
     event.preventDefault()
     // console.dir(event.target)
     const value1 = event.target.elements.fullnameInput.value
-    const value2 = event.target.elements.usernameInput.value
     onSubmitUsername(value1)
-    onSubmitUsername(value2)
   }
 
+function handleChange(event){
+  const {value} = event.target
+  const isLowerCase = value === value.toLowerCase()
+  setError(isLowerCase ? null : "can't start with capitalize")
+}
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor='fullnameInput'>Full Name:</label>
-        <input id="fullnameInput" type="text" />
-        <label htmlFor='usernameInput'>Username:</label>
-        <input id="usernameInput" type="text" />
+        <input id="fullnameInput" type="text" onChange={handleChange} />
       </div>
-      <button type="submit">Submit</button>
+      <div style={{color:'red'}}>{error}</div>
+      <button disabled={Boolean(error)} type="submit">Submit</button>
     </form>
   )
 }
